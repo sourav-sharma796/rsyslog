@@ -411,15 +411,16 @@ BEGINnewActInst
     for (i = 0; i < actpblk.nParams; ++i) {
         if (!pvals[i].bUsed) continue;
         if (!strcmp(actpblk.descr[i].name, "target")) {
-            pData->target = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->target = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
         } else if (!strcmp(actpblk.descr[i].name, "port")) {
-            pData->port = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->port = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
         } else if (!strcmp(actpblk.descr[i].name, "template")) {
-            pData->tplName = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->tplName = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
         } else if (!strcmp(actpblk.descr[i].name, "statsname")) {
-            pData->statsName = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->statsName = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
         } else if (!strcmp(actpblk.descr[i].name, "tls.authmode")) {
-            char *pszAuthMode = es_str2cstr(pvals[i].val.d.estr, NULL);
+            char *pszAuthMode;
+            CHKmalloc(pszAuthMode = es_str2cstr(pvals[i].val.d.estr, NULL));
             if (!strcasecmp(pszAuthMode, "fingerprint"))
                 pData->pNetOssl->authMode = OSSL_AUTH_CERTFINGERPRINT;
             else if (!strcasecmp(pszAuthMode, "name"))
@@ -430,7 +431,7 @@ BEGINnewActInst
                 pData->pNetOssl->authMode = OSSL_AUTH_CERTANON;
             free(pszAuthMode);
         } else if (!strcmp(actpblk.descr[i].name, "tls.cacert")) {
-            pData->pNetOssl->pszCAFile = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->pNetOssl->pszCAFile = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
             fp = fopen((const char *)pData->pNetOssl->pszCAFile, "r");
             if (fp == NULL) {
                 char errStr[1024];
@@ -441,7 +442,7 @@ BEGINnewActInst
                 fclose(fp);
             }
         } else if (!strcmp(actpblk.descr[i].name, "tls.mycert")) {
-            pData->pNetOssl->pszCertFile = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->pNetOssl->pszCertFile = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
             fp = fopen((const char *)pData->pNetOssl->pszCertFile, "r");
             if (fp == NULL) {
                 char errStr[1024];
@@ -452,7 +453,7 @@ BEGINnewActInst
                 fclose(fp);
             }
         } else if (!strcmp(actpblk.descr[i].name, "tls.myprivkey")) {
-            pData->pNetOssl->pszKeyFile = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->pNetOssl->pszKeyFile = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
             fp = fopen((const char *)pData->pNetOssl->pszKeyFile, "r");
             if (fp == NULL) {
                 char errStr[1024];
@@ -463,7 +464,7 @@ BEGINnewActInst
                 fclose(fp);
             }
         } else if (!strcmp(actpblk.descr[i].name, "tls.tlscfgcmd")) {
-            pData->tlscfgcmd = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL);
+            CHKmalloc(pData->tlscfgcmd = (uchar *)es_str2cstr(pvals[i].val.d.estr, NULL));
         } else {
             LogError(0, RS_RET_INTERNAL_ERROR, "omdtls: program error, non-handled param '%s'\n",
                      actpblk.descr[i].name);
