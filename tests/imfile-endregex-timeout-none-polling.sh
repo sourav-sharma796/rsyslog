@@ -1,5 +1,7 @@
 #!/bin/bash
 # This is part of the rsyslog testbench, licensed under ASL 2.0
+export NUMMESSAGES=1
+export QUEUE_EMPTY_CHECK_FUNC=wait_file_lines
 . ${srcdir:=.}/diag.sh init
 if [ $(uname) = "SunOS" ] ; then
    echo "Solaris: FIX ME"
@@ -44,7 +46,6 @@ echo ' msgnum:2
 # as imfile waits whether or not there is a follow-up line that it needs
 # to combine.
 echo 'END OF TEST' >> $RSYSLOG_DYNNAME.input
-./msleep 200
 
 shutdown_when_empty # shut down rsyslogd when done processing messages
 wait_shutdown    # we need to wait until rsyslogd is finished!
